@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                String TAG = "StartButton";
+                //String TAG = "StartButton";
 
                 // Case 1 - start
                 if (mStartButton.getText().toString().equals("Start")) {
