@@ -45,11 +45,11 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                //String TAG = "StartButton";
+                String TAG = "StartButton";
 
                 // Case 1 - start
                 if (mStartButton.getText().toString().equals("Start")) {
-                    //Log.d(TAG, "Case 1 - Start Button is present");
+                    Log.d(TAG, "Case 1 - Start Button is present");
                     mStartButton.setText(R.string.pauseBtnLabel);
                     startTime = SystemClock.uptimeMillis();
                     mHandler.postDelayed(updateTimerThread, 0);
