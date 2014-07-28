@@ -91,28 +91,6 @@ public class MainActivity extends Activity {
 
             }
         });
-
-        /*
-        mStartButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                startTime = SystemClock.uptimeMillis();
-                mHandler.postDelayed(updateTimerThread, 0);
-            }
-        });
-
-        mPauseButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                timeSwapBuffer += timeInMs;
-                mHandler.removeCallbacks(updateTimerThread);
-            }
-        }); */
-
-
-
     }
 
     private Runnable updateTimerThread = new Runnable() {
