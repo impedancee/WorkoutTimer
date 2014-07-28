@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 
@@ -28,12 +29,23 @@ public class MainActivity extends Activity {
     long timeSwapBuffer = 0L;
     long updatedTime = 0L;
 
+    // Numberpicker to set the timer
+    private NumberPicker mPicker;
+    private int maxValue = 180; // For the number picker
+    private int minValue = 15;  // For the number picker
 
+    private int pickerValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mPicker = (NumberPicker)findViewById(R.id.numberPicker);
+        mPicker.setMaxValue(maxValue); // Value defined at line 34
+        mPicker.setMinValue(minValue); // Value defined at line 35
+
+
 
         timerValue = (TextView)findViewById(R.id.timerText);
 
@@ -49,8 +61,10 @@ public class MainActivity extends Activity {
 
                 // Case 1 - start
                 if (mStartButton.getText().toString().equals("Start")) {
+
+                    pickerValue = mPicker.getValue(); // Get value off Picker;
                     Log.d(TAG, "Case 1 - Start Button is present");
-                    mStartButton.setText(R.string.pauseBtnLabel);
+                    mStartButton.setText(R.string.pauseBtnLabel); // Change text of start button from "Start" to "Pause"
                     startTime = SystemClock.uptimeMillis();
                     mHandler.postDelayed(updateTimerThread, 0);
 
@@ -62,9 +76,6 @@ public class MainActivity extends Activity {
                     timeSwapBuffer += timeInMs;
                     mHandler.removeCallbacks(updateTimerThread);
                 }
-                // Case 3 - Resume
-
-
             }
         });
 
@@ -75,8 +86,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 // Case 4 - Reset
-
-                // Reset counters to 0 - Could implement a method for this
                 resetCounters();
                 mHandler.removeCallbacks(updateTimerThread);
 
@@ -115,13 +124,24 @@ public class MainActivity extends Activity {
             updatedTime = timeSwapBuffer + timeInMs;
 
             int secs = (int) (updatedTime / 1000);
-            int mins = secs / 60;
+
+            int countDownSecs = pickerValue - secs; // Variable used to display countdown instead of count up
+
+            int mins = countDownSecs / 60; // Changed from secs
             secs = secs%60;
-            int milliseconds = (int) (updatedTime % 1000);
+
+            countDownSecs = countDownSecs%60; // added
+
+            int milliseconds = 1000 - (int) (updatedTime % 1000); // Added "1000 -" - To make the text count down
             timerValue.setText("" + mins + ":"
-                    + String.format("%02d", secs) + ":"
+                    + String.format("%02d", countDownSecs-1) + ":" // Changed from secs
                     + String.format("%03d", milliseconds));
             mHandler.postDelayed(this, 0);
+
+            if (countDownSecs == 0) {
+                mHandler.removeCallbacks(this);
+                resetCounters(); //Workaround for counter not stopping at 0
+            }
         }
     };
 
